@@ -144,9 +144,9 @@
      -->
 
     <scm>
-        <connection>scm:svn:https://wp-subversion.am.agf.fr/development/framework/codjo/maven/plugins/maven-test-release-plugin/trunk</connection>
-        <developerConnection>scm:svn:https://wp-subversion.am.agf.fr/development/framework/codjo/maven/plugins/maven-test-release-plugin/trunk</developerConnection>
-        <url>https://wp-subversion.am.agf.fr/development/framework/codjo/maven/plugins/maven-test-release-plugin/trunk/</url>
-    </scm>
+        <connection>scm:git:https://github.com/codjo/maven-test-release-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/codjo/maven-test-release-plugin.git</developerConnection>
+        <url>https://github.com/codjo/maven-test-release-plugin</url>
+	</scm>
 
 </project>
