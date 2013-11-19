@@ -1,0 +1,17 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <releaseTestDirectory>target/test-classes/mojos/run/release-test</releaseTestDirectory>
+                    <remote>true</remote>
+                    <jvmArgs>-Xmx512m</jvmArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

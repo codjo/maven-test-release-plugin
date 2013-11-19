@@ -1,0 +1,19 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <webMainClass>net.codjo.icomp.ICompWebServer</webMainClass>
+                    <webConfigProperties>
+                        src/test/resources-filtered/mojos/startWeb/web-config.properties
+                    </webConfigProperties>
+                    <releaseDirectory>target/test-classes/mojos/startWeb/WEB</releaseDirectory>
+                    <web/>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

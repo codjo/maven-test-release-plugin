@@ -1,0 +1,3 @@
+Test	Total before	Used before	Free before	Total after	Used after	Free after	Time	
+DetenteurInconnu__BatchDetenteurInconnu(com.agf.test.release.ReleaseTest)	12.12890625	10.91357421875	1.21533203125	16.25	10.136123657226562	6.1138763427734375	5906	
+DetenteurInconnu__DashboardDetenteurInconnu(com.agf.test.release.ReleaseTest)	16.25	10.142684936523438	6.1073150634765625	17.73828125	13.772071838378906	3.9662094116210938	16562	

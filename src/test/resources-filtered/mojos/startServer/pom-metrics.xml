@@ -1,0 +1,23 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <serverMainClass>net.codjo.mint.ServerMain</serverMainClass>
+                    <serverConfigProperties>
+                        src/test/resources-filtered/mojos/startServer/server-config.properties
+                    </serverConfigProperties>
+                    <releaseDirectory>src/test/resources-filtered/mojos/startServer/SERVEUR</releaseDirectory>
+                    <server/>
+                    <packageToInclude>my.group.id</packageToInclude>
+                    <coverageServerOutputFile>target/release-test.es</coverageServerOutputFile>
+                    <coverage>true</coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

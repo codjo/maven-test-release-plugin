@@ -1,0 +1,20 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <coverageClientOutputFile>target/client.es</coverageClientOutputFile>
+                    <coverageServerOutputFile>target/server.es</coverageServerOutputFile>
+                    <coverage>true</coverage>
+                    <reportCoverageOutputDirectory>target/report</reportCoverageOutputDirectory>
+                    <reportCoverageTrRelativePath>index.html</reportCoverageTrRelativePath>
+                    <reportCoverageRelativePath>indexAll.html</reportCoverageRelativePath>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

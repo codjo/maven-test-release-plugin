@@ -1,0 +1,43 @@
+9
+
+dir
+15217
+https://wp-subversion.am.agf.fr/maven-test-release-plugin/trunk
+https://wp-subversion.am.agf.fr
+
+
+
+2009-03-13T15:41:05.917028Z
+15215
+gonnot
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d9e0c693-6127-0410-a9b6-f47348635327
+
+pom.xml
+file
+
+
+
+
+2009-03-13T15:33:24.567827Z
+52ebf614f83fe1ae031fba3d1a6f2819
+2009-03-11T14:58:42.911489Z
+15149
+galaber
+
+src
+dir
+

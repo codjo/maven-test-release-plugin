@@ -1,0 +1,23 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <windowsApplicationDirectory>target</windowsApplicationDirectory>
+                    <includeTestResources>
+                        <include>
+                            <output>target/destination/dir</output>
+                            <file>src/test/resources-filtered/mojos/deliverInputData/aFileToDeploy.txt</file>
+                        </include>
+                        <include>
+                            <file>src/test/resources-filtered/mojos/deliverInputData/aDirectoryToDeploy</file>
+                        </include>
+                    </includeTestResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

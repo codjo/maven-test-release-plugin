@@ -1,0 +1,20 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <shutdownMainClass>
+                        net.codjo.maven.mojo.testrelease.AdministrationShutdownerMock
+                    </shutdownMainClass>
+                    <serverPort>16969</serverPort>
+                    <serverHost>localhost</serverHost>
+                    <server/>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

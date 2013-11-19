@@ -1,0 +1,23 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <releaseTestDirectory>target/test-classes/mojos/run/release-test/</releaseTestDirectory>
+                    <shutdownMainClass>net.codjo.AdministrationShutdownerMock</shutdownMainClass>
+                    <packageToInclude>my.group.id</packageToInclude>
+                    <coverageClientOutputFile>target/release-test.es</coverageClientOutputFile>
+                    <serverPort>16969</serverPort>
+                    <serverHost>localhost</serverHost>
+                    <jvmArgs>-Xmx512m</jvmArgs>
+                    <server/>
+                    <coverage>true</coverage>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,20 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <serverMainClass>net.codjo.mint.ServerMain</serverMainClass>
+                    <serverConfigProperties>
+                        src/test/resources-filtered/mojos/startServer/server-config.properties
+                    </serverConfigProperties>
+                    <releaseDirectory>src/test/resources-filtered/mojos/startServer/SERVEUR</releaseDirectory>
+                    <server/>
+                    <localServerJvmArgs>-Xmx128m</localServerJvmArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
