@@ -71,6 +71,7 @@ public class MetricReportTest extends TestCase {
               expectedContent
                     .replaceAll("<svn-revision>", SvnDataExtractorTest.currentSvnRevision())
                     .replaceAll("<svn-url>", SvnDataExtractorTest.currentSvnUrl())
+                    .replaceAll("\r\n","\n")
               , FileUtil.loadContent(file));
     }
 

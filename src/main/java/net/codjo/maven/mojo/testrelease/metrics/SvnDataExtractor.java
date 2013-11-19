@@ -10,7 +10,7 @@ class SvnDataExtractor {
     public SvnData extract(String entriesFileContent) {
         SvnData data = new SvnData();
         if (isSvn15Format(entriesFileContent)) {
-            String[] rows = entriesFileContent.split("\n");
+            String[] rows = entriesFileContent.split(System.getProperty("line.separator"));
             if (rows.length < 5) {
                 throw new IllegalArgumentException(INVALID_ENTRIES_FORMAT);
             }
