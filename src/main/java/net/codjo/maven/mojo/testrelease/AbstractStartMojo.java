@@ -27,12 +27,19 @@ public abstract class AbstractStartMojo extends AbstractTestReleaseMojo {
     private String localServerJvmArgs;
 
     /**
-     * Temps d'attente après le démarrage du serveur.
+     * Temps d'attente après le démarrage du serveur (Uniquement en local).
      *
      * @parameter expression="${sleepAfterLocalStart}" default-value="0"
      * @noinspection UnusedDeclaration
      */
     private int sleepAfterLocalStart;
+
+    /**
+     * Temps d'attente avant de verifer le statut du serveur (Uniquement en remote).
+     *
+     * @parameter expression="${waitTimeBeforeCheckStatus}" default-value="3"
+     * @noinspection UnusedDeclaration
+     */
     private int waitTimeBeforeCheckStatus = 3;
 
 
