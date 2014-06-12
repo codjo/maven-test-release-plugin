@@ -67,6 +67,6 @@ public class OneUnixCommandTest extends TestCase {
 
 
     protected void setUp() throws Exception {
-        command = new OneUnixCommand(new UnixSessionFactory("login", "host"));
+        command = new OneUnixCommand(new UnixSessionFactory("login", "host", UnixSessionFactory.DEFAULT_SSH_PORT));
     }
 }

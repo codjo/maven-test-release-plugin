@@ -129,6 +129,14 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * @noinspection UNUSED_SYMBOL,UnusedDeclaration
      */
     private String unixPassword;
+
+    /**
+     * port ssh pour se connecter au serveur.
+     *
+     * @parameter expression="${serverPort}" default-value="22"
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration, FieldCanBeLocal
+     */
+    private int serverPort=22;
     private UnixCommandFactory unixCommandFactory = new UnixCommandFactory();
     private WindowsCommandFactory windowsCommandFactory = new WindowsCommandFactory();
 
@@ -184,7 +192,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
 
 
     protected UnixSessionFactory createSessionFactory() {
-        return new UnixSessionFactory(unixLogin, serverHost);
+        return new UnixSessionFactory(unixLogin, serverHost, serverPort);
     }
 
 
