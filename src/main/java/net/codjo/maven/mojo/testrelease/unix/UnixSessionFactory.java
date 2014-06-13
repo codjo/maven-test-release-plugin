@@ -1,5 +1,4 @@
 package net.codjo.maven.mojo.testrelease.unix;
-import net.codjo.util.file.FileUtil;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -7,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+import net.codjo.util.file.FileUtil;
 /**
  *
  */
@@ -21,7 +21,12 @@ public class UnixSessionFactory {
     public UnixSessionFactory(String login, String host, int port, URL privateKey) {
         this.login = login;
         this.host = host;
-        this.port = port;
+        if (port != 0) {
+            this.port = port;
+        }
+        else {
+            this.port = DEFAULT_SSH_PORT;
+        }
         this.privateKey = privateKey;
     }
 
