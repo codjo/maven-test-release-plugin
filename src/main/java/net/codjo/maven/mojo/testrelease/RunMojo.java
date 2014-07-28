@@ -1,8 +1,8 @@
 package net.codjo.maven.mojo.testrelease;
+import java.io.File;
 import net.codjo.maven.common.artifact.ArtifactDescriptor;
 import net.codjo.maven.mojo.util.DefaultJavaExecutor;
 import net.codjo.maven.mojo.util.JavaExecutor;
-import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 /**
@@ -104,9 +104,15 @@ public class RunMojo extends AbstractTestReleaseMojo {
      */
     protected String jvmArgs;
 
+    /**
+     * @parameter expression="${timeout}"
+     * @noinspection UNUSED_SYMBOL
+     */
+    protected long timeout = DEFAULT_TIMEOUT;
+
     private JavaExecutor runJavaExecutor = new DefaultJavaExecutor();
     private JavaExecutor shutdownJavaExecutor = new DefaultJavaExecutor();
-    static final long TIMEOUT = 4 * 60 * 60 * 1000;
+    static final long DEFAULT_TIMEOUT = 4 * 60 * 60 * 1000;
 
 
     public void setRunJavaExecutor(JavaExecutor runJavaExecutor) {
@@ -178,7 +184,8 @@ public class RunMojo extends AbstractTestReleaseMojo {
         shutdownJavaExecutor.setWorkingDir(project.getBasedir());
         shutdownJavaExecutor.setJvmArg(jvmArg);
 
-        runJavaExecutor.setTimeout(TIMEOUT);
+        getLog().info("Le timeout global d'execution des test-releases est de " + timeout + " ms.");
+        runJavaExecutor.setTimeout(timeout);
         runJavaExecutor.setWorkingDir(project.getBasedir());
         runJavaExecutor.setJvmArg(jvmArg);
         try {
@@ -200,6 +207,6 @@ public class RunMojo extends AbstractTestReleaseMojo {
 
 
     private String computeTimeoutMessage() {
-        return "Le timeout global d'execution des test-releases (" + TIMEOUT / 3600 / 1000 + " heures) a expire !!";
+        return "Le timeout global d'execution des test-releases (" + timeout / 3600 / 1000 + " heures) a expire !!";
     }
 }

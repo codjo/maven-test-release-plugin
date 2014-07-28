@@ -1,16 +1,19 @@
 package net.codjo.maven.mojo.testrelease;
-import net.codjo.maven.mojo.util.DefaultJavaExecutor;
-import net.codjo.reflect.collect.ReflectUtil;
 import java.io.File;
 import java.util.HashSet;
+import net.codjo.maven.mojo.util.DefaultJavaExecutor;
+import net.codjo.reflect.collect.ReflectUtil;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.ArtifactStub;
 /**
  *
  */
 public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
+    private static final long CUSTOM_TIMEOUT = 6; // in hours
+
 
     public void test_execute_local() throws Exception {
         RunMojo mojo = initMojo("run/pom-default.xml");
@@ -22,7 +25,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
@@ -78,7 +81,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
         MockUtil.singleton.getProject().setFile(new File("./my-basedir/pom.xml"));
 
         mojo.execute();
-        assertLog("setTimeout(" + RunMojo.TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m \"-javaagent:%emmaAgentJar%=-f my/group/id/* -o target/release-test.es\" -Demma.rt.control=false -Dcoverage.out.merge=true)"
                   + ", execute(net.codjo.reflect.collect.PreloadClassesMainWrapper, [%reflectClassPath%, %emmaClassPath%], my.group.id net.codjo.test.release.ReleaseTestRunner %target%/test-classes/mojos/run/release-test)");
@@ -95,7 +98,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m \"-javaagent:%emmaAgentJar%=-f my/group/id/* -o target/release-test.es\" -Demma.rt.control=false -Dcoverage.out.merge=true)"
                   + ", execute(net.codjo.reflect.collect.PreloadClassesMainWrapper, [common-1.jar, %reflectClassPath%, %emmaClassPath%], my.group.id net.codjo.test.release.ReleaseTestRunner %target%/test-classes/mojos/run/release-test)");
@@ -112,7 +115,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m -Dagf.test.remote=yes)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
@@ -129,15 +132,48 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/usecase/firstTestRelease.xml)");
     }
 
 
+    public void test_execute_localWithCustomTimeout() throws Exception {
+        RunMojo mojo = initMojo("run/pom-local-customTimeout.xml");
+        mojo.setRunJavaExecutor(new JavaExecutorMock(log));
+
+        MockUtil.singleton.getProject().setArtifacts(new HashSet());
+        MockUtil.singleton.getProject().getArtifacts().add(new ArtifactMock("common-1.jar"));
+        MockUtil.singleton.getProject().setFile(new File("./my-basedir/pom.xml"));
+
+        MockPlexusLogger logger = new MockPlexusLogger();
+        mojo.setLog(new DefaultLog(logger));
+
+        mojo.execute();
+
+        long globalTimeout = CUSTOM_TIMEOUT * 3600 * 1000;
+        assertLog("setTimeout(" + globalTimeout + ")"
+                  + ", setWorkingDir(./my-basedir)"
+                  + ", setJvmArg(-Xmx512m)"
+                  + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
+        String expectedLog = "[INFO] Le timeout global d'execution des test-releases est de " + globalTimeout + " ms.";
+        logger.assertContains(expectedLog);
+    }
+
+
     public void test_execute_expiredTimeoutLogsExplicitMessage() throws Exception {
-        RunMojo mojo = initMojo("run/pom-default.xml");
+        execute_expiredTimeoutLogsExplicitMessage("run/pom-default.xml", 4);
+    }
+
+
+    public void test_execute_expiredTimeoutLogsExplicitMessage_customValue() throws Exception {
+        execute_expiredTimeoutLogsExplicitMessage("run/pom-local-customTimeout.xml", CUSTOM_TIMEOUT);
+    }
+
+
+    private void execute_expiredTimeoutLogsExplicitMessage(String pomFilePath, long expectedTimeout) throws Exception {
+        RunMojo mojo = initMojo(pomFilePath);
 
         MockUtil.singleton.getProject().setArtifacts(new HashSet());
         MockUtil.singleton.getProject().getArtifacts().add(new ArtifactMock("common-1.jar"));
@@ -162,7 +198,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
             fail();
         }
         catch (MojoExecutionException e) {
-            assertEquals("Le timeout global d'execution des test-releases (4 heures) a expire !!",
+            assertEquals("Le timeout global d'execution des test-releases (" + expectedTimeout + " heures) a expire !!",
                          e.getMessage());
         }
     }

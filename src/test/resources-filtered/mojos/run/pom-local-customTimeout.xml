@@ -1,0 +1,21 @@
+<project>
+    <name>POM For test</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.codjo.maven.mojo</groupId>
+                <artifactId>maven-test-release-plugin</artifactId>
+                <configuration>
+                    <project implementation="net.codjo.maven.mojo.testrelease.MavenProjectMock"/>
+                    <releaseTestDirectory>target/test-classes/mojos/run/release-test/</releaseTestDirectory>
+                    <shutdownMainClass>net.codjo.AdministrationShutdownerMock</shutdownMainClass>
+                    <serverPort>16969</serverPort>
+                    <serverHost>localhost</serverHost>
+                    <timeout>21600000</timeout>
+                    <jvmArgs>-Xmx512m</jvmArgs>
+                    <server/>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
