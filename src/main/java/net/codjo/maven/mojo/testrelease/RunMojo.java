@@ -3,8 +3,11 @@ import java.io.File;
 import net.codjo.maven.common.artifact.ArtifactDescriptor;
 import net.codjo.maven.mojo.util.DefaultJavaExecutor;
 import net.codjo.maven.mojo.util.JavaExecutor;
+import net.codjo.maven.mojo.util.TimeUtil;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.joda.time.Duration;
+import org.joda.time.Hours;
 /**
  * Goal pour démarrer les test release.
  *
@@ -108,15 +111,20 @@ public class RunMojo extends AbstractTestReleaseMojo {
      * @parameter expression="${timeout}"
      * @noinspection UNUSED_SYMBOL
      */
-    protected long timeout = DEFAULT_TIMEOUT;
+    protected Duration timeout = DEFAULT_TIMEOUT;
 
     private JavaExecutor runJavaExecutor = new DefaultJavaExecutor();
     private JavaExecutor shutdownJavaExecutor = new DefaultJavaExecutor();
-    static final long DEFAULT_TIMEOUT = 4 * 60 * 60 * 1000;
+    static final Duration DEFAULT_TIMEOUT = Hours.FOUR.toStandardDuration();
 
 
     public void setRunJavaExecutor(JavaExecutor runJavaExecutor) {
         this.runJavaExecutor = runJavaExecutor;
+    }
+
+
+    public void setTimeout(String timeout) {
+        this.timeout = TimeUtil.parseDuration(timeout);
     }
 
 
@@ -184,7 +192,10 @@ public class RunMojo extends AbstractTestReleaseMojo {
         shutdownJavaExecutor.setWorkingDir(project.getBasedir());
         shutdownJavaExecutor.setJvmArg(jvmArg);
 
-        getLog().info("Le timeout global d'execution des test-releases est de " + timeout + " ms.");
+        StringBuffer message = new StringBuffer();
+        message.append("The global timeout of release tests execution is ");
+        TimeUtil.printTo(message, timeout).append('.');
+        getLog().info(message.toString());
         runJavaExecutor.setTimeout(timeout);
         runJavaExecutor.setWorkingDir(project.getBasedir());
         runJavaExecutor.setJvmArg(jvmArg);
@@ -207,6 +218,9 @@ public class RunMojo extends AbstractTestReleaseMojo {
 
 
     private String computeTimeoutMessage() {
-        return "Le timeout global d'execution des test-releases (" + timeout / 3600 / 1000 + " heures) a expire !!";
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("The global timeout of release tests execution (");
+        TimeUtil.printTo(buffer, timeout).append(") has expired !!");
+        return buffer.toString();
     }
 }

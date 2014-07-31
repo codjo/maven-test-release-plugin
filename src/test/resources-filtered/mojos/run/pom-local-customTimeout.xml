@@ -11,7 +11,8 @@
                     <shutdownMainClass>net.codjo.AdministrationShutdownerMock</shutdownMainClass>
                     <serverPort>16969</serverPort>
                     <serverHost>localhost</serverHost>
-                    <timeout>21600000</timeout>
+                    <timeout>7380000</timeout>
+                    <!-- 2 hours 3 minutes -->
                     <jvmArgs>-Xmx512m</jvmArgs>
                     <server/>
                 </configuration>

@@ -1,18 +1,61 @@
 package net.codjo.maven.mojo.testrelease;
 import java.io.File;
 import java.util.HashSet;
+import java.util.logging.Logger;
 import net.codjo.maven.mojo.util.DefaultJavaExecutor;
+import net.codjo.maven.mojo.util.TimeUtil;
 import net.codjo.reflect.collect.ReflectUtil;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.stubs.ArtifactStub;
+import org.joda.time.Duration;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 /**
  *
  */
 public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
-    private static final long CUSTOM_TIMEOUT = 6; // in hours
+    private static final Duration _2_HOURS_3_MINUTES = Hours.TWO
+          .toStandardDuration()
+          .plus(Minutes.THREE.toStandardDuration());
+
+
+    public void testSetTimeout_default() {
+        RunMojo mojo = new RunMojo();
+
+        assertEquals("timeout", RunMojo.DEFAULT_TIMEOUT, mojo.timeout);
+    }
+
+
+    public void testSetTimeout_number() {
+        testSetTimeout(Long.toString(_2_HOURS_3_MINUTES.getMillis()), _2_HOURS_3_MINUTES);
+    }
+
+
+    public void testSetTimeout_longString() {
+        testSetTimeout("2 hours 3 minutes", _2_HOURS_3_MINUTES);
+    }
+
+
+    public void testSetTimeout_shortString() {
+        testSetTimeout("2h 3m", _2_HOURS_3_MINUTES);
+    }
+
+
+    public void testSetTimeout_compactString() {
+        testSetTimeout("2h3m", _2_HOURS_3_MINUTES);
+    }
+
+
+    private void testSetTimeout(String timeout, Duration expectedTimeout) {
+        RunMojo mojo = new RunMojo();
+
+        mojo.setTimeout(timeout);
+
+        assertEquals("timeout", expectedTimeout, mojo.timeout);
+    }
 
 
     public void test_execute_local() throws Exception {
@@ -25,7 +68,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
@@ -81,7 +124,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
         MockUtil.singleton.getProject().setFile(new File("./my-basedir/pom.xml"));
 
         mojo.execute();
-        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m \"-javaagent:%emmaAgentJar%=-f my/group/id/* -o target/release-test.es\" -Demma.rt.control=false -Dcoverage.out.merge=true)"
                   + ", execute(net.codjo.reflect.collect.PreloadClassesMainWrapper, [%reflectClassPath%, %emmaClassPath%], my.group.id net.codjo.test.release.ReleaseTestRunner %target%/test-classes/mojos/run/release-test)");
@@ -98,7 +141,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m \"-javaagent:%emmaAgentJar%=-f my/group/id/* -o target/release-test.es\" -Demma.rt.control=false -Dcoverage.out.merge=true)"
                   + ", execute(net.codjo.reflect.collect.PreloadClassesMainWrapper, [common-1.jar, %reflectClassPath%, %emmaClassPath%], my.group.id net.codjo.test.release.ReleaseTestRunner %target%/test-classes/mojos/run/release-test)");
@@ -115,7 +158,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m -Dagf.test.remote=yes)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
@@ -132,7 +175,7 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT + ")"
+        assertLog("setTimeout(" + RunMojo.DEFAULT_TIMEOUT.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/usecase/firstTestRelease.xml)");
@@ -152,35 +195,36 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         mojo.execute();
 
-        long globalTimeout = CUSTOM_TIMEOUT * 3600 * 1000;
-        assertLog("setTimeout(" + globalTimeout + ")"
+        assertLog("setTimeout(" + _2_HOURS_3_MINUTES.getMillis() + ")"
                   + ", setWorkingDir(./my-basedir)"
                   + ", setJvmArg(-Xmx512m)"
                   + ", execute(net.codjo.test.release.ReleaseTestRunner, [common-1.jar], %target%/test-classes/mojos/run/release-test)");
-        String expectedLog = "[INFO] Le timeout global d'execution des test-releases est de " + globalTimeout + " ms.";
-        logger.assertContains(expectedLog);
+        StringBuffer expectedLog = new StringBuffer("[INFO] The global timeout of release tests execution is ");
+        TimeUtil.printTo(expectedLog, _2_HOURS_3_MINUTES).append('.');
+        logger.assertContains(expectedLog.toString());
     }
 
 
     public void test_execute_expiredTimeoutLogsExplicitMessage() throws Exception {
-        execute_expiredTimeoutLogsExplicitMessage("run/pom-default.xml", 4);
+        execute_expiredTimeoutLogsExplicitMessage("run/pom-default.xml", Hours.FOUR.toStandardDuration());
     }
 
 
     public void test_execute_expiredTimeoutLogsExplicitMessage_customValue() throws Exception {
-        execute_expiredTimeoutLogsExplicitMessage("run/pom-local-customTimeout.xml", CUSTOM_TIMEOUT);
+        execute_expiredTimeoutLogsExplicitMessage("run/pom-local-customTimeout.xml", _2_HOURS_3_MINUTES);
     }
 
 
-    private void execute_expiredTimeoutLogsExplicitMessage(String pomFilePath, long expectedTimeout) throws Exception {
+    private void execute_expiredTimeoutLogsExplicitMessage(String pomFilePath, Duration expectedTimeout)
+          throws Exception {
         RunMojo mojo = initMojo(pomFilePath);
 
         MockUtil.singleton.getProject().setArtifacts(new HashSet());
         MockUtil.singleton.getProject().getArtifacts().add(new ArtifactMock("common-1.jar"));
 
         DefaultJavaExecutor javaExecutor = new DefaultJavaExecutor() {
-            public void setTimeout(long timeout) {
-                super.setTimeout(5);
+            public void setTimeout(Duration timeout) {
+                super.setTimeout(new Duration(5));
             }
 
 
@@ -195,11 +239,13 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
 
         try {
             mojo.execute();
-            fail();
+            fail("An exception was expected");
         }
         catch (MojoExecutionException e) {
-            assertEquals("Le timeout global d'execution des test-releases (" + expectedTimeout + " heures) a expire !!",
-                         e.getMessage());
+            StringBuffer expectedMessage = new StringBuffer();
+            expectedMessage.append("The global timeout of release tests execution (");
+            TimeUtil.printTo(expectedMessage, expectedTimeout).append(") has expired !!");
+            assertEquals(expectedMessage.toString(), e.getMessage());
         }
     }
 
@@ -235,12 +281,20 @@ public class RunMojoTest extends AbstractTestReleaseMojoTestCase {
     }
 
     public static class FakeMain {
+
+        private static final Logger LOGGER = Logger.getLogger("FakeMain");
+
+
         public static void main(String[] args) {
+            Logger.getLogger("FakeMain").info("BEGIN FakeMain.main");
             try {
                 Thread.sleep(5000);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            finally {
+                LOGGER.info("END FakeMain.main");
             }
         }
     }

@@ -1,15 +1,16 @@
 package net.codjo.maven.mojo.testrelease;
-import net.codjo.maven.mojo.util.JavaExecutor;
-import net.codjo.reflect.collect.ClassCollector;
-import net.codjo.reflect.collect.PreloadClassesMainWrapper;
-import net.codjo.reflect.collect.ReflectUtil;
 import com.intellij.rt.execution.emma.RunnerAgent;
 import com.vladium.emma.EMMAProperties;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.codjo.maven.mojo.util.JavaExecutor;
+import net.codjo.reflect.collect.ClassCollector;
+import net.codjo.reflect.collect.PreloadClassesMainWrapper;
+import net.codjo.reflect.collect.ReflectUtil;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.joda.time.Duration;
 /**
  *
  */
@@ -53,7 +54,7 @@ class EmmaJavaExecutor implements JavaExecutor {
     }
 
 
-    public void setTimeout(long timeout) {
+    public void setTimeout(Duration timeout) {
         java.setTimeout(timeout);
     }
 

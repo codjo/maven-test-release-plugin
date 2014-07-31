@@ -1,5 +1,6 @@
 package net.codjo.maven.mojo.testrelease;
 import java.io.File;
+import org.joda.time.Duration;
 /**
  *
  */
@@ -61,7 +62,7 @@ public class EmmaJavaExecutorTest extends AbstractTestReleaseMojoTestCase {
 
 
     public void test_delegate_setTimeout() {
-        emmaExecutor.setTimeout(5);
+        emmaExecutor.setTimeout(new Duration(5));
         log.assertContent("setTimeout(5)");
     }
 

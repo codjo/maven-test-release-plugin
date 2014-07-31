@@ -1,6 +1,7 @@
 package net.codjo.maven.mojo.util;
 import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.joda.time.Duration;
 /**
  *
  */
@@ -15,7 +16,7 @@ public interface JavaExecutor {
     void setFailOnError(boolean failOnError);
 
 
-    public void setTimeout(long timeout);
+    public void setTimeout(Duration timeout);
 
 
     void setSpawnProcess(boolean spawnProcess);

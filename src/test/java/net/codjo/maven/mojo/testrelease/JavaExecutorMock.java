@@ -1,8 +1,9 @@
 package net.codjo.maven.mojo.testrelease;
+import java.io.File;
 import net.codjo.maven.mojo.util.JavaExecutor;
 import net.codjo.test.common.LogString;
-import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.joda.time.Duration;
 /**
  *
  */
@@ -36,8 +37,8 @@ class JavaExecutorMock implements JavaExecutor {
     }
 
 
-    public void setTimeout(long timeout) {
-        logger.call("setTimeout", Long.toString(timeout));
+    public void setTimeout(Duration timeout) {
+        logger.call("setTimeout", Long.valueOf(timeout.getMillis()));
     }
 
 

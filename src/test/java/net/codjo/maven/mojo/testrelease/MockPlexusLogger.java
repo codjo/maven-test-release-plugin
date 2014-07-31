@@ -64,6 +64,7 @@ public class MockPlexusLogger extends AbstractLogger {
         if (throwable != null) {
             buffer.append(throwable.getClass()).append(" : ").append(throwable.getMessage());
         }
+        buffer.append(LINE_SEPARATOR);
     }
 
 
