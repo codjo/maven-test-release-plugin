@@ -17,6 +17,11 @@ public class TimeUtilTest extends TestCase {
     }
 
 
+    public void testParseDuration_nullString() throws Exception {
+        testParseDuration(null);
+    }
+
+
     public void testParseDuration_longString_withAnd() throws Exception {
         testParseDuration("5 hours and 3 minutes");
     }
@@ -39,13 +44,24 @@ public class TimeUtilTest extends TestCase {
 
     private void testParseDuration(String duration) throws Exception {
         Duration actualDuration = TimeUtil.parseDuration(duration);
-        assertEquals(EXPECTED_DURATION, actualDuration);
+        Duration expectedDuration = (duration == null) ? null : EXPECTED_DURATION;
+        assertEquals(expectedDuration, actualDuration);
     }
 
 
-    public void testPrintTo() throws Exception {
+    public void testPrintTo_nonNullDuration() throws Exception {
+        testPrintTo(EXPECTED_DURATION, "5 hours and 3 minutes");
+    }
+
+
+    public void testPrintTo_nullDuration() throws Exception {
+        testPrintTo(null, "null");
+    }
+
+
+    private void testPrintTo(Duration duration, String expectedString) throws Exception {
         StringBuffer buffer = new StringBuffer();
-        String actualResult = TimeUtil.printTo(buffer, EXPECTED_DURATION).toString();
-        assertEquals("5 hours and 3 minutes", actualResult);
+        String actualResult = TimeUtil.printTo(buffer, duration).toString();
+        assertEquals(expectedString, actualResult);
     }
 }

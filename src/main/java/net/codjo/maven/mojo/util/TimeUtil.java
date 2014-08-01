@@ -13,6 +13,10 @@ public class TimeUtil {
      * "2h3m" or "2h 3m".</li> </ol>
      */
     public static Duration parseDuration(String duration) {
+        if (duration == null) {
+            return null;
+        }
+
         Duration result;
         try {
             result = new Duration(Long.parseLong(duration));
@@ -91,7 +95,12 @@ public class TimeUtil {
 
 
     public static final StringBuffer printTo(StringBuffer buffer, Duration duration) {
-        LONG_PERIOD_FORMATTER.printTo(buffer, duration.toPeriod());
+        if (duration == null) {
+            buffer.append("null");
+        }
+        else {
+            LONG_PERIOD_FORMATTER.printTo(buffer, duration.toPeriod());
+        }
         return buffer;
     }
 }
