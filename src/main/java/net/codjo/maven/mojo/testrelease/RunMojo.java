@@ -108,7 +108,7 @@ public class RunMojo extends AbstractTestReleaseMojo {
     protected String jvmArgs;
 
     /**
-     * @parameter expression="${timeout}"
+     * @parameter property="timeout" default-value="4h"
      * @noinspection UNUSED_SYMBOL
      */
     protected Duration timeout = DEFAULT_TIMEOUT;
