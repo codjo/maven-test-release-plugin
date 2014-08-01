@@ -32,7 +32,7 @@ public class DefaultJavaExecutor implements JavaExecutor {
         java.setJvm(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java");
         java.setDir(workingDir);
         java.setFork(true);
-        java.setTimeout(Long.valueOf(timeout.getMillis()));
+        java.setTimeout((timeout == null) ? null : Long.valueOf(timeout.getMillis()));
         java.setSpawn(spawnProcess);
 
         java.addSysproperty(createVariable(Log4jUtil.CONFIGURATION_KEY, Log4jUtil.getConfigurationFile()));
