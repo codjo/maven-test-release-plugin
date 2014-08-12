@@ -5,11 +5,12 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.Path;
+import org.joda.time.Duration;
 /**
  *
  */
 public class DefaultJavaExecutor implements JavaExecutor {
-    protected Long timeout;
+    protected Duration timeout;
     private boolean spawnProcess = false;
     private boolean failOnError = true;
     private File workingDir = new File(".");
@@ -31,7 +32,7 @@ public class DefaultJavaExecutor implements JavaExecutor {
         java.setJvm(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java");
         java.setDir(workingDir);
         java.setFork(true);
-        java.setTimeout(timeout);
+        java.setTimeout((timeout == null) ? null : Long.valueOf(timeout.getMillis()));
         java.setSpawn(spawnProcess);
 
         java.addSysproperty(createVariable(Log4jUtil.CONFIGURATION_KEY, Log4jUtil.getConfigurationFile()));
@@ -56,8 +57,8 @@ public class DefaultJavaExecutor implements JavaExecutor {
     }
 
 
-    public void setTimeout(long timeout) {
-        this.timeout = new Long(timeout);
+    public void setTimeout(Duration timeout) {
+        this.timeout = timeout;
     }
 
 

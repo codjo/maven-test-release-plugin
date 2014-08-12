@@ -1,13 +1,14 @@
 package net.codjo.maven.mojo.testrelease;
+import java.io.File;
+import java.util.Collection;
 import net.codjo.maven.common.artifact.ArtifactDescriptor;
 import net.codjo.maven.mojo.util.DefaultJavaExecutor;
 import net.codjo.maven.mojo.util.JavaExecutor;
-import java.io.File;
-import java.util.Collection;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.joda.time.Minutes;
 /**
  *
  */
@@ -85,7 +86,7 @@ public abstract class AbstractStopMojo extends AbstractTestReleaseMojo {
                                                    Log log) {
         File[] classPath = createClassPath(project.getArtifacts());
 
-        javaExecutor.setTimeout(60 * 1000);
+        javaExecutor.setTimeout(Minutes.ONE.toStandardDuration());
         javaExecutor.setDisplayProcessOutput(true);
 
         boolean shutdownComplete = false;
@@ -108,7 +109,7 @@ public abstract class AbstractStopMojo extends AbstractTestReleaseMojo {
     public static File[] createClassPath(Collection artifacts) {
         File[] classpathFiles = new File[artifacts.size()];
         int index = 0;
-        for (java.util.Iterator it = artifacts.iterator(); it.hasNext();) {
+        for (java.util.Iterator it = artifacts.iterator(); it.hasNext(); ) {
             classpathFiles[index++] = ((Artifact)it.next()).getFile();
         }
         return classpathFiles;

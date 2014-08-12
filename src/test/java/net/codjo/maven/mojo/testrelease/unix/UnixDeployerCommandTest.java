@@ -124,7 +124,7 @@ public class UnixDeployerCommandTest extends TestCase {
 
 
     protected void setUp() throws Exception {
-        deployer = new UnixDeployerCommand(new UnixSessionFactory("login", "mikros.local"));
+        deployer = new UnixDeployerCommand(new UnixSessionFactory("login", "mikros.local", UnixSessionFactory.DEFAULT_SSH_PORT));
     }
 
 

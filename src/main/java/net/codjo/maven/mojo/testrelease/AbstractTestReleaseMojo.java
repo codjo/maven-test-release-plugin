@@ -1,9 +1,9 @@
 package net.codjo.maven.mojo.testrelease;
+import java.io.File;
 import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
 import net.codjo.maven.mojo.testrelease.unix.UnixCommandFactory;
 import net.codjo.maven.mojo.testrelease.unix.UnixSessionFactory;
 import net.codjo.maven.mojo.testrelease.windows.WindowsCommandFactory;
-import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 /**
@@ -22,7 +22,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Commutateur permettant de basculer en mode unix.
      *
      * @parameter expression="${remote}" default-value="false"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private boolean remote;
 
@@ -30,7 +30,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Commutateur permettant d'activer la mesure de couverture de code par les tests.
      *
      * @parameter expression="${coverage}" default-value="false"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private boolean coverage;
 
@@ -70,21 +70,21 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Repertoire destination de la couverture de test.
      *
      * @parameter expression="${reportCoverageOutputDirectory}" default-value="${project.basedir}/target/emma-report"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     protected File reportCoverageOutputDirectory;
     /**
      * Repertoire destination de la couverture de test-release.
      *
      * @parameter expression="${reportCoverageTrRelativePath}" default-value="emma-report-tr/index.html"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String reportCoverageTrRelativePath;
     /**
      * Repertoire destination de la couverture de test-release + unit-test.
      *
      * @parameter expression="${reportCoverageRelativePath}" default-value="emma-report-all/index.html"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String reportCoverageRelativePath;
 
@@ -93,7 +93,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * '/CODJOAM/DEV/DAF_WEB1/MINT/APP1' (i.e. la variable Unix '$MINT_APP').
      *
      * @parameter expression="${unixApplicationDirectory}"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String unixApplicationDirectory;
 
@@ -102,7 +102,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * '\\bi-delreco\delreco$\APP'.
      *
      * @parameter expression="${windowsApplicationDirectory}"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String windowsApplicationDirectory;
 
@@ -110,7 +110,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Nom du service Windows de l'application.
      *
      * @parameter expression="${windowsServiceName}"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String windowsServiceName;
 
@@ -118,7 +118,7 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Compte unix applicatif. Ce compte est utilisé pour le déploiement et l'execution de l'application.
      *
      * @parameter expression="${unixLogin}"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String unixLogin;
 
@@ -126,9 +126,17 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
      * Mot de passe unix applicatif.
      *
      * @parameter expression="${unixPassword}"
-     * @noinspection UNUSED_SYMBOL,UnusedDeclaration
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration
      */
     private String unixPassword;
+
+    /**
+     * port ssh pour se connecter au serveur.
+     *
+     * @parameter expression="${sshPort}" default-value="22"
+     * @noinspection UNUSED_SYMBOL, UnusedDeclaration, FieldCanBeLocal
+     */
+    private int sshPort = 22;
     private UnixCommandFactory unixCommandFactory = new UnixCommandFactory();
     private WindowsCommandFactory windowsCommandFactory = new WindowsCommandFactory();
 
@@ -184,7 +192,8 @@ public abstract class AbstractTestReleaseMojo extends AbstractMojo {
 
 
     protected UnixSessionFactory createSessionFactory() {
-        return new UnixSessionFactory(unixLogin, serverHost);
+        getLog().info("Unix connection on " + serverHost + ":" + sshPort + " with " + unixLogin);
+        return new UnixSessionFactory(unixLogin, serverHost, sshPort);
     }
 
 

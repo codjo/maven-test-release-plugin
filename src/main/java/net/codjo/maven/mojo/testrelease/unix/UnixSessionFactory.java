@@ -1,5 +1,4 @@
 package net.codjo.maven.mojo.testrelease.unix;
-import net.codjo.util.file.FileUtil;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -7,24 +6,33 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
+import net.codjo.util.file.FileUtil;
 /**
  *
  */
 public class UnixSessionFactory {
+    public static final int DEFAULT_SSH_PORT = 22;
     private final String login;
     private final String host;
     private final URL privateKey;
+    private final int port;
 
 
-    public UnixSessionFactory(String login, String host, URL privateKey) {
+    public UnixSessionFactory(String login, String host, int port, URL privateKey) {
         this.login = login;
         this.host = host;
+        if (port != 0) {
+            this.port = port;
+        }
+        else {
+            this.port = DEFAULT_SSH_PORT;
+        }
         this.privateKey = privateKey;
     }
 
 
-    public UnixSessionFactory(String login, String host) {
-        this(login, host, UnixSessionFactory.class.getResource("/META-INF/id_integration"));
+    public UnixSessionFactory(String login, String host, int port) {
+        this(login, host, port, UnixSessionFactory.class.getResource("/META-INF/id_integration"));
     }
 
 
@@ -45,7 +53,7 @@ public class UnixSessionFactory {
             throw new JSchException("impossible de créer la session", e);
         }
 
-        Session session = jsch.getSession(login, host, 22);
+        Session session = jsch.getSession(login, host, port);
         Properties config = new Properties();
         config.put("StrictHostKeyChecking", "no");
         session.setConfig(config);
