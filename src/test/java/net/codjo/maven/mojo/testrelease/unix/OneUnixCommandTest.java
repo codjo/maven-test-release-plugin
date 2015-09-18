@@ -1,7 +1,9 @@
 package net.codjo.maven.mojo.testrelease.unix;
+import junit.framework.TestCase;
 import net.codjo.maven.mojo.testrelease.util.ChannelExecMock;
 import net.codjo.test.common.LogString;
-import junit.framework.TestCase;
+import net.codjo.test.release.util.ssh.SecureCommand;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 /**
  * Classe de test de {@link OneUnixCommand}.
  */
@@ -67,6 +69,6 @@ public class OneUnixCommandTest extends TestCase {
 
 
     protected void setUp() throws Exception {
-        command = new OneUnixCommand(new UnixSessionFactory("login", "host", UnixSessionFactory.DEFAULT_SSH_PORT));
+        command = new OneUnixCommand(new UnixSessionFactory("login", "host", SecureCommand.DEFAULT_SSH_PORT));
     }
 }

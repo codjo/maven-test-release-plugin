@@ -1,10 +1,10 @@
 package net.codjo.maven.mojo.testrelease;
+import java.io.File;
 import net.codjo.maven.mojo.testrelease.command.DeployerCommand;
 import net.codjo.maven.mojo.testrelease.command.DeployerCommandMock;
 import net.codjo.maven.mojo.testrelease.unix.UnixCommandFactory;
-import net.codjo.maven.mojo.testrelease.unix.UnixSessionFactory;
 import net.codjo.test.common.LogString;
-import java.io.File;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.tools.ant.Project;

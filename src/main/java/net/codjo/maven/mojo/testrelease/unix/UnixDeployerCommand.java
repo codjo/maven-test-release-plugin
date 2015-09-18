@@ -1,5 +1,4 @@
 package net.codjo.maven.mojo.testrelease.unix;
-import net.codjo.maven.mojo.testrelease.command.DeployerCommand;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
@@ -11,6 +10,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import net.codjo.maven.mojo.testrelease.command.DeployerCommand;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 /**
  *
  */

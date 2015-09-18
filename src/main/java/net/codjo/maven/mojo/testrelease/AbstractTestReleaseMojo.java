@@ -2,8 +2,8 @@ package net.codjo.maven.mojo.testrelease;
 import java.io.File;
 import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
 import net.codjo.maven.mojo.testrelease.unix.UnixCommandFactory;
-import net.codjo.maven.mojo.testrelease.unix.UnixSessionFactory;
 import net.codjo.maven.mojo.testrelease.windows.WindowsCommandFactory;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 /**

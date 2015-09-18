@@ -1,11 +1,12 @@
 package net.codjo.maven.mojo.testrelease.unix;
-import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import java.io.IOException;
 import java.io.InputStream;
+import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 /**
  *
  */

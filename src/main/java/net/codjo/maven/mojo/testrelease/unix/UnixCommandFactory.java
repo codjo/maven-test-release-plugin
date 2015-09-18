@@ -1,6 +1,7 @@
 package net.codjo.maven.mojo.testrelease.unix;
 import net.codjo.maven.mojo.testrelease.command.DeployerCommand;
 import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 /**
  *
  */

@@ -1,10 +1,12 @@
 package net.codjo.maven.mojo.testrelease.unix;
-import net.codjo.maven.mojo.testrelease.util.ChannelExecMock;
-import net.codjo.maven.mojo.testrelease.util.ChannelSftpMock;
-import net.codjo.test.common.LogString;
 import com.jcraft.jsch.SftpException;
 import java.io.File;
 import junit.framework.TestCase;
+import net.codjo.maven.mojo.testrelease.util.ChannelExecMock;
+import net.codjo.maven.mojo.testrelease.util.ChannelSftpMock;
+import net.codjo.test.common.LogString;
+import net.codjo.test.release.util.ssh.SecureCommand;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 /**
  * Classe de test de {@link UnixDeployerCommand}.
  */
@@ -29,6 +31,7 @@ public class UnixDeployerCommandTest extends TestCase {
                           + ", exit()"
                           + ", disconnect()");
     }
+
 
     public void testUploadResource() throws Exception {
         File zipFile = new File(ZIP_FILE_NO_SHELL);
@@ -124,7 +127,9 @@ public class UnixDeployerCommandTest extends TestCase {
 
 
     protected void setUp() throws Exception {
-        deployer = new UnixDeployerCommand(new UnixSessionFactory("login", "mikros.local", UnixSessionFactory.DEFAULT_SSH_PORT));
+        deployer = new UnixDeployerCommand(new UnixSessionFactory("login",
+                                                                  "mikros.local",
+                                                                  SecureCommand.DEFAULT_SSH_PORT));
     }
 
 

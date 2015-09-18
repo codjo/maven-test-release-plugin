@@ -8,12 +8,12 @@ import net.codjo.maven.mojo.testrelease.command.DeployerCommandMock;
 import net.codjo.maven.mojo.testrelease.command.OneShellCommand;
 import net.codjo.maven.mojo.testrelease.command.OneShellCommandMock;
 import net.codjo.maven.mojo.testrelease.unix.UnixCommandFactory;
-import net.codjo.maven.mojo.testrelease.unix.UnixSessionFactory;
 import net.codjo.maven.mojo.testrelease.windows.WindowsCommandFactory;
 import net.codjo.reflect.collect.ClassCollector;
 import net.codjo.reflect.collect.ReflectUtil;
 import net.codjo.test.common.LogString;
 import net.codjo.test.common.PathUtil;
+import net.codjo.test.release.util.ssh.UnixSessionFactory;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 /**
