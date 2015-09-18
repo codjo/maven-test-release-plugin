@@ -45,7 +45,7 @@ public class MetricReportTest extends TestCase {
 
 
     public void test_writeBasicReport_noRows() throws Exception {
-        new MetricReport(Date.valueOf("2009-03-01"), directoryFixture,SvnDataExtractorTest.getSvnEntriesPath())
+        new MetricReport(Date.valueOf("2009-03-01"), directoryFixture, SvnDataExtractorTest.getSvnEntriesPath())
               .writeBasicReport(PathUtil.find(getClass(), "testreleaseSuite_noRows.log.xls"));
     }
 
@@ -71,7 +71,7 @@ public class MetricReportTest extends TestCase {
               expectedContent
                     .replaceAll("<svn-revision>", SvnDataExtractorTest.currentSvnRevision())
                     .replaceAll("<svn-url>", SvnDataExtractorTest.currentSvnUrl())
-                    .replaceAll("\r\n","\n")
+                    .replaceAll("\r\n", "\n")
               , FileUtil.loadContent(file));
     }
 
@@ -104,7 +104,7 @@ public class MetricReportTest extends TestCase {
                           .writeBasicReport(PathUtil.find(getClass(), "testreleaseSuite.log.xls"));
                 }
                 catch (Exception e) {
-                    Assert.fail();
+                    throw new AssertionError(e);
                 }
             }
         };

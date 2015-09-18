@@ -1,9 +1,10 @@
 package net.codjo.maven.mojo.testrelease.metrics;
+import junit.framework.TestCase;
+import net.codjo.util.file.FileUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import junit.framework.TestCase;
-import net.codjo.util.file.FileUtil;
 /**
  *
  */
@@ -36,6 +37,14 @@ public class SvnDataExtractorTest extends TestCase {
 
         assertEquals("15217", data.getRevision());
         assertEquals("https://wp-subversion.am.agf.fr/maven-test-release-plugin/trunk", data.getUrl());
+    }
+
+    public void test_extract_svn16_unixFormat() throws IOException {
+        SvnData data
+              = svnDataExtractor.extract(FileUtil.loadContent(getClass().getResource("entries-svn1-6")));
+
+        assertEquals("550", data.getRevision());
+        assertEquals("https://wp-subversion.am.agf.fr/development/magic/trunk", data.getUrl());
     }
 
 

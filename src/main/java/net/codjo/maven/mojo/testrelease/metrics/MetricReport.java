@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.codehaus.plexus.util.FileUtils;
@@ -39,8 +41,9 @@ public class MetricReport {
     private void create(Report report) throws IOException {
         File metricsFile = new File(metricsTargetDirectory, report.getMetricFileName());
         FileChannel fileChannel = new FileOutputStream(metricsFile, true).getChannel();
+        FileLock lock = null;
         try {
-            fileChannel.lock();
+            lock = obtainExclusiveLock(fileChannel);
             if (fileChannel.size() == 0) {
                 fileChannel.write(ByteBuffer.wrap(report.getHeader().getBytes()));
                 fileChannel.write(ByteBuffer.wrap("\n".getBytes()));
@@ -49,8 +52,34 @@ public class MetricReport {
                                new SvnDataExtractor().extract(FileUtils.fileRead(new File(svnEntriePath))));
         }
         finally {
+            if (lock != null) {
+                lock.release();
+            }
             fileChannel.close();
         }
+    }
+
+
+    private FileLock obtainExclusiveLock(FileChannel fileChannel) throws IOException {
+        FileLock lock = null;
+        do {
+            try {
+                lock = fileChannel.tryLock();
+            }
+            catch (OverlappingFileLockException ofle) {
+                // ignore
+            }
+            if (lock == null) {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e) {
+                    // ignore
+                }
+            }
+        }
+        while (lock == null);
+        return lock;
     }
 
 

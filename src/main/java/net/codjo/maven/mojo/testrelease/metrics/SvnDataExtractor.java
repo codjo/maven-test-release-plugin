@@ -10,12 +10,12 @@ class SvnDataExtractor {
     public SvnData extract(String entriesFileContent) {
         SvnData data = new SvnData();
         if (isSvn15Format(entriesFileContent)) {
-            String[] rows = entriesFileContent.split(System.getProperty("line.separator"));
+            String[] rows = entriesFileContent.split("\n");
             if (rows.length < 5) {
                 throw new IllegalArgumentException(INVALID_ENTRIES_FORMAT);
             }
-            data.setRevision(rows[3]);
-            data.setUrl(rows[4]);
+            data.setRevision(rows[3].trim());
+            data.setUrl(rows[4].trim());
         }
         else {
             data.setRevision(extractValue(entriesFileContent, "revision=\"", "\""));
